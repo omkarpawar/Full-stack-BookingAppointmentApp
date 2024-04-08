@@ -10,9 +10,7 @@ document.addEventListener('DOMContentLoaded',()=>{
         const name = formData.get('name');
         const phone = formData.get('phone');
         const email = formData.get('email');
-        console.log(name);
-        console.log(phone);
-        console.log(email);
+        
 
         try{
             const response =await axios.post('/bookings',{name,phone,email});
@@ -54,14 +52,18 @@ document.addEventListener('DOMContentLoaded',()=>{
         deleteBtn.setAttribute('data-id', booking.id);
         deleteBtn.appendChild(document.createTextNode('Delete'));
         bookingList.appendChild(deleteBtn);
-
-        const editBtn=document.createElement('button');
-        editBtn.setAttribute('data-id', booking.id);
-        editBtn.appendChild(document.createTextNode('edit'));
-        bookingList.appendChild(editBtn);
-
-        
-    
+        deleteBtn.addEventListener('click', async () => {
+            try {
+                const response = await axios.delete(`/bookings/${booking.id}`);
+                if (response.data.success) {
+                    // Remove booking item from UI
+                    bookingItem.remove();
+                    deleteBtn.remove();
+                }
+            } catch (error) {
+                console.error('Error:', error.message);
+            }
+        });
     }
     fetchBookings();
 });

@@ -1,26 +1,16 @@
 const express = require('express');
 const Booking = require('../models/booking');
+const userPost = require('../controllers/booking');
+const userGet = require('../controllers/booking');
+const deleteUser = require('../controllers/booking');
 
 const router = express.Router();
 
-router.get('/',async(req,res)=>{
-    try{
-        const booking = await Booking.findAll();
-        res.json({success:true,booking});
-    }catch(error){
-        console.error(error);
-    }
-});
+router.get('/',userPost.adduser);
 
-router.post('/',async(req,res)=>{
-    try{
-        const{name,phone,email}=req.body;
-        const booking = await Booking.create({name, phone, email});
-        res.status(201).json({success:true,booking});
-    }catch (error){
-        console.error(error);
-    }
-});
+router.post('/',userGet.getuser);
+// Delete a booking by ID
+router.delete('/:id', deleteUser.userdelete);
 
 
 module.exports=router;
